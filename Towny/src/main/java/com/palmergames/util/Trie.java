@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Dynamic trie structure that can add/remove keys and recursively get matching strings for a key 
@@ -20,7 +21,7 @@ public class Trie {
 	 * TrieNode implementation that handles any character and keeps track of its own children and character
 	 */
 	public static class TrieNode {
-		final Map<Character, TrieNode> children = new HashMap<>();
+		final Map<Character, TrieNode> children = new ConcurrentHashMap<>();
 		final char character;
 		boolean endOfWord = false;
 
