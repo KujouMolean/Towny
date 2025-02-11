@@ -138,26 +138,27 @@ public class TownyEconomyHandler {
 	 * @return true if successful.
 	 */
 	public static boolean setupEconomy() {
-
-		if (vaultUnlockedPresent())
+		if (economy == null && vaultUnlockedPresent()){
 			provider = new VaultUnlockedEconomyProvider();
-		else if (vaultPresent())
-			provider = new VaultEconomyProvider();
-		else if (plugin.getServer().getPluginManager().isPluginEnabled("Reserve"))
-			provider = new ReserveEconomyProvider((Reserve) plugin.getServer().getPluginManager().getPlugin("Reserve"));
-		
-		if (provider != null) {
 			economy = provider.mainAdapter();
-
-			if (economy != null) {
-				version = economy.name() + " via " + provider.name();
-				
-				if (provider.isLegacy())
-					version += " (Legacy)";
-				
-				return true;
-			}
 		}
+		if (economy == null && vaultPresent()) {
+			provider = new VaultEconomyProvider();
+			economy = provider.mainAdapter();
+		}
+		if (economy == null && plugin.getServer().getPluginManager().isPluginEnabled("Reserve")) {
+			provider = new ReserveEconomyProvider((Reserve) plugin.getServer().getPluginManager().getPlugin("Reserve"));
+			economy = provider.mainAdapter();
+		}
+		if (economy != null) {
+			version = economy.name() + " via " + provider.name();
+
+			if (provider.isLegacy())
+				version += " (Legacy)";
+
+			return true;
+		}
+		
 
 		/*
 		 * No compatible Economy system found.
